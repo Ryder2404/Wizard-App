@@ -1,10 +1,12 @@
 // Service Worker: speichert die App für die Offline-Nutzung.
 // Bei Änderungen an Dateien die Versionsnummer erhöhen, damit das iPhone die neue Version lädt.
-const CACHE = 'wizard-v1';
+const CACHE = 'wizard-v2';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
+  './sfx.js',
+  './commentator.js',
   './app.js',
   './manifest.webmanifest',
   './icons/icon.svg',
