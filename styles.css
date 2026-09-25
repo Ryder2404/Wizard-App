@@ -269,3 +269,38 @@ dialog .actions { display: flex; flex-direction: column; gap: 8px; }
 
 .install-hint { border-style: dashed; }
 .install-hint ol { padding-left: 20px; margin: 6px 0 0; }
+
+/* ---------- Kommentator-Sprechblase ---------- */
+#bubble {
+  position: fixed; left: 12px; right: 12px; z-index: 40;
+  bottom: calc(var(--safe-bottom) + 84px);
+  max-width: 560px; margin: 0 auto;
+  display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: start;
+  padding: 12px 12px 12px 12px; border-radius: 18px;
+  background: linear-gradient(180deg, #3a2b86, #2a1f66);
+  border: 1px solid rgba(242, 195, 91, .55);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+  opacity: 0; transform: translateY(24px) scale(.96); pointer-events: none;
+  transition: opacity .25s ease, transform .35s cubic-bezier(.2, 1.4, .4, 1);
+}
+#bubble.show { opacity: 1; transform: none; pointer-events: auto; }
+#bubble .b-avatar {
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 26px; background: rgba(0, 0, 0, .25);
+}
+#bubble.show .b-avatar { animation: wobble 1.2s ease-in-out 2; }
+#bubble .b-text { font-size: 15px; line-height: 1.4; padding-top: 2px; }
+#bubble .b-actions { display: flex; flex-direction: column; gap: 4px; }
+#bubble .b-btn {
+  width: 32px; height: 32px; border-radius: 10px; border: 0; background: rgba(0, 0, 0, .25);
+  color: var(--gold); font-size: 16px; cursor: pointer;
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-12deg); }
+  75% { transform: rotate(12deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bubble { transition: opacity .2s; transform: none; }
+  #bubble.show .b-avatar { animation: none; }
+}

@@ -14,6 +14,11 @@ Sie lässt sich auf dem iPhone über Safari installieren, ohne Mac, Apple-Konto 
 - Tabelle mit Zwischenstand, Korrektur der letzten Runde, Ergebnis mit Podest und Trefferquote
 - Verlauf der letzten Spiele, Revanche mit denselben Spielern
 - Regelübersicht inkl. aller Sonderkarten (Drache, Fee, Bombe, Wolke, Jongleur, Werwolf, Gestaltwandler, Hexe, Vampir)
+- **Kommentator**: Nach jeder Runde gibt es einen witzigen Spruch passend zur Situation
+  (Bombe, alle daneben, Stichflaute bei Null-Ansage, Führungswechsel, Pechsträhne, Minuspunkte …).
+  Er erscheint als Sprechblase, wird von der iPhone-Stimme vorgelesen und von Soundeffekten begleitet
+  (Lachen, Drache, Explosion, Fanfare, Trommelwirbel, traurige Posaune). Stimme, Effekte und
+  Kommentator lassen sich auf der Startseite einzeln abschalten.
 - Offline nutzbar, Spielstand bleibt beim Schließen erhalten, Bildschirm bleibt während des Spiels an
 
 ## Veröffentlichen (einmalig)
@@ -60,6 +65,18 @@ Die App lädt neue Dateien, sobald sie online ist.
 | `index.html` | Grundgerüst und iOS-Meta-Tags |
 | `styles.css` | Design |
 | `app.js` | Logik: Spielverwaltung, Wertung, Ansichten |
+| `commentator.js` | Kommentator: Situationserkennung und alle Sprüche (Liste `LINES` – hier eigene Sprüche ergänzen) |
+| `sfx.js` | Soundeffekte, per Web Audio erzeugt (keine Audiodateien) |
 | `sw.js` | Service Worker für den Offline-Betrieb |
 | `manifest.webmanifest` | App-Name, Icons, Vollbild |
 | `icons/` | App-Icons (`icon.svg` ist die Vorlage) |
+
+## Eigene Sprüche
+
+In `commentator.js` stehen alle Sprüche in `LINES`, sortiert nach Situation. Syntax:
+
+- `{name}`, `{names}`, `{leader}` … Platzhalter (welche es gibt, steht in `analyze()`)
+- `[lachen]`, `[drache]`, `[bumm]`, `[wahwah]`, `[tada]`, `[magie]`, `[trommel]`, `[glocke]`: Soundeffekt
+- `{{Drache!}}`: wird dramatisch langsam und tief gesprochen
+
+Danach die Versionsnummer in `sw.js` erhöhen.

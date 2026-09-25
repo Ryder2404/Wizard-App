@@ -245,6 +245,7 @@ function viewHome() {
   }
 
   html += `<div class="card stack"><button class="btn" data-act="rules">📖 Regeln &amp; Sonderkarten</button></div>`;
+  html += commentatorCard();
 
   if (state.history.length) {
     html += `<div class="card"><h2>Letzte Spiele</h2>`;
@@ -343,12 +344,34 @@ function viewSetup() {
   };
 }
 
-function switchRow(key, on, label, hint) {
+function switchRow(key, on, label, hint, attr = 'opt') {
   return `
     <label class="switch-row">
       <span class="label">${label}<small>${hint}</small></span>
-      <span class="switch"><input type="checkbox" data-opt="${key}" ${on ? 'checked' : ''}><span></span></span>
+      <span class="switch"><input type="checkbox" data-${attr}="${key}" ${on ? 'checked' : ''}><span></span></span>
     </label>`;
+}
+
+function commentatorCard() {
+  const cs = Commentator.settings;
+  const voices = Commentator.voices();
+  let html = `<div class="card"><h2>🎙 Kommentator</h2>
+    ${switchRow('on', cs.on, 'Kommentator', 'Witzige Sprüche nach jeder Runde', 'cset')}`;
+  if (cs.on) {
+    html += switchRow('voice', cs.voice, 'Stimme', 'Sprüche werden von der iPhone-Stimme vorgelesen', 'cset');
+    html += switchRow('sfx', cs.sfx, 'Soundeffekte', 'Lachen, Drache, Fanfare & Co. – bei Lautlos-Schalter stumm', 'cset');
+    if (cs.voice && voices.length) {
+      html += `<select class="field" data-voice style="margin:6px 0 10px">
+        <option value="">Stimme: automatisch (beste verfügbare)</option>
+        ${voices.map((v) => `<option value="${esc(v.voiceURI)}" ${v.voiceURI === cs.voiceURI ? 'selected' : ''}>${esc(v.name)}${v.lang === 'de-DE' ? '' : ` (${esc(v.lang)})`}</option>`).join('')}
+      </select>`;
+    }
+    html += `<button class="btn small-btn" data-act="sample">▶︎ Probe hören</button>`;
+    if (cs.voice) {
+      html += `<p class="small muted" style="margin:10px 0 0">Tipp: Unter <b>Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch</b> lassen sich „erweiterte“ Stimmen laden. Sie klingen natürlicher und können hier ausgewählt werden, sofern Safari sie freigibt.</p>`;
+    }
+  }
+  return `${html}</div>`;
 }
 
 function stepper(kind, i, val, min, max) {
@@ -681,6 +704,12 @@ function viewRules() {
    ========================================================= */
 const actions = {
   home: () => go('home'),
+
+  sample: () => {
+    const last = store.get('wz.lastPlayers', null);
+    const names = state.game ? state.game.players : last && last.length ? last : ['Spieler 1', 'Spieler 2'];
+    Commentator.sample(names.slice(0, 2));
+  },
   rules: () => go('rules', { back: state.view }),
   resume: () => go('game'),
 
@@ -735,6 +764,7 @@ const actions = {
       cur: null,
     };
     state.game.cur = newRound(state.game);
+    Commentator.gameStart(state.game);
     save();
     go('game', { tab: 'round' });
   },
@@ -782,10 +812,11 @@ const actions = {
       return;
     }
     g.cur = newRound(g);
+    const spoke = Commentator.afterRound(g);
     save();
     render();
     window.scrollTo(0, 0);
-    toast(`Runde ${g.done.length} gespeichert`);
+    if (!spoke) toast(`Runde ${g.done.length} gespeichert`);
   },
 
   'undo-round': async () => {
@@ -871,6 +902,7 @@ function reopenLast(g) {
 function finishGame() {
   const g = state.game;
   g.finishedAt = Date.now();
+  Commentator.gameEnd(g);
   delete g.cur;
   state.history.unshift(g);
   state.history = state.history.slice(0, 50);
@@ -927,11 +959,16 @@ async function openGameMenu() {
   const choice = await ask('Spiel', `${g.players.length} Spieler · Runde ${roundNo(g)} von ${g.rounds}`, [
     { label: '📖 Regeln & Sonderkarten', value: 'rules' },
     { label: '↩︎ Letzte Runde korrigieren', value: 'undo' },
+    { label: Commentator.settings.on ? '🔇 Kommentator aus' : '🎙 Kommentator an', value: 'commentator' },
     { label: '🏁 Spiel jetzt beenden', value: 'end' },
     { label: '🗑 Spiel verwerfen', cls: 'danger', value: 'discard' },
     { label: 'Schließen', value: null },
   ]);
   if (choice === 'rules') go('rules', { back: 'game' });
+  if (choice === 'commentator') {
+    Commentator.set('on', !Commentator.settings.on);
+    toast(Commentator.settings.on ? 'Kommentator ist an' : 'Kommentator ist aus');
+  }
   if (choice === 'undo') {
     if (g.done.length) actions['undo-round']();
     else toast('Noch keine Runde gespielt');
@@ -981,6 +1018,11 @@ app.addEventListener('input', (e) => {
 app.addEventListener('change', (e) => {
   const t = e.target;
   if (t.dataset.opt) state.draft.opts[t.dataset.opt] = t.checked;
+  if (t.dataset.cset) {
+    Commentator.set(t.dataset.cset, t.checked);
+    render();
+  }
+  if (t.hasAttribute('data-voice')) Commentator.set('voiceURI', t.value);
   if (t.hasAttribute('data-dealer')) state.draft.dealer0 = +t.value;
 });
 
@@ -995,6 +1037,9 @@ app.addEventListener('keydown', (e) => {
 });
 
 /* ---------- Start ---------- */
+Commentator.onVoices = () => {
+  if (state.view === 'home') render();
+};
 if (state.game && state.game.cur) state.view = 'game';
 render();
 
