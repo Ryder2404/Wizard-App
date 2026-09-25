@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wizard Begleiter</title>
+  <meta name="description" content="Punkteblock und Regelhilfe für Wizard (30-Jahre-Jubiläumsedition)">
+  <meta name="theme-color" content="#120c2e">
+  <!-- iOS: Vollbild-App nach „Zum Home-Bildschirm“ -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wizard">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="backBtn" aria-label="Zurück" hidden>‹</button>
+    <h1 id="title">Wizard</h1>
+    <button class="icon-btn" id="menuBtn" aria-label="Menü" hidden>⋯</button>
+  </header>
+  <main id="app"></main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="dialog"></dialog>
+  <script src="app.js"></script>
+</body>
+</html>

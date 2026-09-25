@@ -1,0 +1,17 @@
+{
+  "name": "Wizard Begleiter – 30 Jahre",
+  "short_name": "Wizard",
+  "description": "Punkteblock und Regelhilfe für Wizard (30-Jahre-Jubiläumsedition)",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#120c2e",
+  "theme_color": "#120c2e",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

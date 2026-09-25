@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="75%">
+      <stop offset="0" stop-color="#3b2a7a"/>
+      <stop offset="1" stop-color="#120c2e"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#d69a2d"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <g fill="#ffe9a8" opacity=".85">
+    <circle cx="96" cy="110" r="5"/><circle cx="410" cy="92" r="4"/>
+    <circle cx="430" cy="210" r="3"/><circle cx="70" cy="250" r="3"/>
+    <circle cx="140" cy="60" r="3"/>
+  </g>
+  <!-- Hut -->
+  <path d="M256 70 C300 150 330 250 350 350 L162 350 C185 250 215 150 256 70 Z" fill="#4f3fb0" stroke="url(#gold)" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M256 70 C240 60 225 70 214 88" fill="none" stroke="url(#gold)" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="256" cy="360" rx="170" ry="38" fill="#4f3fb0" stroke="url(#gold)" stroke-width="10"/>
+  <path d="M170 320 Q256 345 342 320 L346 340 Q256 368 166 340 Z" fill="url(#gold)"/>
+  <!-- Sterne -->
+  <path d="M256 170 l12 26 28 3 -21 19 6 28 -25 -14 -25 14 6 -28 -21 -19 28 -3 z" fill="url(#gold)"/>
+  <path d="M300 255 l6 13 14 1.5 -10.5 9.5 3 14 -12.5 -7 -12.5 7 3 -14 -10.5 -9.5 14 -1.5 z" fill="url(#gold)"/>
+  <path d="M212 262 l5 10 11 1 -8 7 2.5 11 -10.5 -5.5 -10 5.5 2.5 -11 -8 -7 11 -1 z" fill="url(#gold)"/>
+  <!-- 30 -->
+  <text x="256" y="462" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="64" fill="url(#gold)" letter-spacing="4">30</text>
+</svg>
